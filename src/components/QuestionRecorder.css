@@ -1,0 +1,11 @@
+.question-recorder {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-top: 1rem;
+}
+
+.question-recorder .actions {
+	display: flex;
+	gap: 0.75rem;
+}
