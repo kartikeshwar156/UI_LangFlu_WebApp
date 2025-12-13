@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Onboarding from "./Onboarding";
-import QuestionRecorder from "./QuestionRecorder";
+import ConversationFlow from "./ConversationFlow";
 import "./MainPage.css";
 
 interface UserProfile {
@@ -15,6 +15,7 @@ interface MainPageProps {
 	onPlay?: () => void;
 	onboardingDone: boolean;
 	onOnboardingComplete: (ans: Record<string, string | string[]>) => void;
+	onboardingAnswers: Record<string, string | string[]>;
 }
 
 function MainPage({
@@ -23,11 +24,8 @@ function MainPage({
 	onPlay,
 	onboardingDone,
 	onOnboardingComplete,
+	onboardingAnswers,
 }: MainPageProps) {
-	const [transcript, setTranscript] = useState("");
-	const question =
-		"Do you agree with the statement: I know exactly what to say in my head, but can't find the right words?";
-
 	return (
 		<div className="main-page">
 			<header className="topbar">
@@ -61,19 +59,11 @@ function MainPage({
 								Clear info
 							</button>
 						</div>
-						<div className="question-block">
-							<p className="hint">{question}</p>
-							<QuestionRecorder
-								question={question}
-								onTranscript={(text) => setTranscript(text)}
-							/>
-							{transcript && (
-								<p className="hint">
-									Transcript: <strong>{transcript}</strong>
-								</p>
-							)}
-						</div>
 					</section>
+					<ConversationFlow
+						onboardingAnswers={onboardingAnswers}
+						userProfile={user || {}}
+					/>
 				</>
 			)}
 		</div>
