@@ -15,7 +15,7 @@ const INITIAL_QUESTION =
 const ConversationFlow: React.FC<ConversationFlowProps> = ({
 	onboardingAnswers,
 	userProfile,
-	apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
+	apiBase = import.meta.env.VITE_API_BASE_URL || "https://backend-langflu-webapp-422555260560.europe-west1.run.app",
 }) => {
 	const [questionAnswers, setQuestionAnswers] = useState<QuestionAnswer[]>([
 		new QuestionAnswer(INITIAL_QUESTION, "", ""),

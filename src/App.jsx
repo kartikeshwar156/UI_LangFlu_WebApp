@@ -3,7 +3,9 @@ import LoginPage from "./components/LoginPage";
 import MainPage from "./components/MainPage";
 import "./App.css";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+const API_BASE =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://backend-langflu-webapp-422555260560.europe-west1.run.app";
 const STORAGE_KEY = "lf_userinfo";
 
 function App() {
