@@ -10,7 +10,7 @@ interface ConversationFlowProps {
 }
 
 const INITIAL_QUESTION =
-	"Do you agree with the statement: I know exactly what to say in my head, but can't find the right words?";
+	"Tell me anything about yourself so that we can start a conversation, it could be your interests , hobbies, favourite books, work, family, etc.?";
 
 const ConversationFlow: React.FC<ConversationFlowProps> = ({
 	onboardingAnswers,
@@ -103,11 +103,11 @@ const ConversationFlow: React.FC<ConversationFlowProps> = ({
 		<div className="conversation-flow">
 			<div className="conversation-header">
 				<h3>Practice Session</h3>
-				{!isStopped && (
+				{/* {!isStopped && (
 					<button className="secondary stop-btn" onClick={handleStop}>
 						Stop
 					</button>
-				)}
+				)} */}
 			</div>
 
 			<div className="question-block">

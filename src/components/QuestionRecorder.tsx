@@ -17,7 +17,7 @@ type QuestionRecorderProps = {
 const QuestionRecorder: React.FC<QuestionRecorderProps> = ({
 	question,
 	onTranscript,
-	googleApiKey = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY || "AIzaSyDcZL56X6tM5OCg_5vvMXoC6ZRkezw9bRc",
+	googleApiKey = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY,
 	disabled = false,
 	autoStart = false,
 }) => {
