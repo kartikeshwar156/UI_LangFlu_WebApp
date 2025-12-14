@@ -52,9 +52,9 @@ function MainPage({
 							className="hero-image"
 						/>
 						<div className="actions">
-							<button className="primary play-btn" onClick={onPlay}>
+							{/* <button className="primary play-btn" onClick={onPlay}>
 								Play
-							</button>
+							</button> */}
 							<button className="secondary" onClick={onLogout}>
 								Clear info
 							</button>
