@@ -66,6 +66,7 @@ function App() {
             setOnboardingAnswers(ans);
             setOnboardingDone(true);
           }}
+          onboardingAnswers={onboardingAnswers}
         />
       )}
     </main>

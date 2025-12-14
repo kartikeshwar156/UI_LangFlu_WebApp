@@ -5,17 +5,21 @@ type QuestionRecorderProps = {
 	question: string;
 	onTranscript: (text: string) => void;
 	googleApiKey?: string; // Google Cloud API key
+	disabled?: boolean; // Disable recording when true
+	autoStart?: boolean; // Automatically start when question changes
 };
 
 /**
  * Plays the question via TTS, then records mic input.
  * Recording auto-stops after 3s of silence and sends audio to Google Cloud Speech-to-Text API.
- * Requires REACT_APP_GOOGLE_CLOUD_API_KEY environment variable.
+ * Requires VITE_GOOGLE_CLOUD_API_KEY environment variable.
  */
 const QuestionRecorder: React.FC<QuestionRecorderProps> = ({
 	question,
 	onTranscript,
-	googleApiKey = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY,
+	googleApiKey = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY || "AIzaSyDcZL56X6tM5OCg_5vvMXoC6ZRkezw9bRc",
+	disabled = false,
+	autoStart = false,
 }) => {
 	const [speaking, setSpeaking] = useState(false);
 	const [recording, setRecording] = useState(false);
@@ -27,6 +31,8 @@ const QuestionRecorder: React.FC<QuestionRecorderProps> = ({
 	const analyserRef = useRef<AnalyserNode | null>(null);
 	const silenceStartRef = useRef<number | null>(null);
 	const silenceTimerRef = useRef<number | null>(null);
+	const previousQuestionRef = useRef<string>("");
+	const hasStartedRef = useRef<boolean>(false);
 
 	useEffect(() => {
 		return () => {
@@ -34,9 +40,30 @@ const QuestionRecorder: React.FC<QuestionRecorderProps> = ({
 		};
 	}, []);
 
+	// Auto-start when question changes (after initial manual start)
+	useEffect(() => {
+		if (
+			autoStart &&
+			hasStartedRef.current &&
+			question !== previousQuestionRef.current &&
+			!disabled &&
+			!speaking &&
+			!recording &&
+			googleApiKey
+		) {
+			previousQuestionRef.current = question;
+			// Small delay to ensure UI is ready
+			setTimeout(() => {
+				speakQuestion();
+			}, 500);
+		} else if (question !== previousQuestionRef.current) {
+			previousQuestionRef.current = question;
+		}
+	}, [question, autoStart, disabled, speaking, recording, googleApiKey]);
+
 	useEffect(() => {
 		if (!googleApiKey) {
-			setError("Google Cloud API key not configured. Set REACT_APP_GOOGLE_CLOUD_API_KEY.");
+			setError("Google Cloud API key not configured. Set VITE_GOOGLE_CLOUD_API_KEY in your .env file.");
 		}
 	}, [googleApiKey]);
 
@@ -60,6 +87,7 @@ const QuestionRecorder: React.FC<QuestionRecorderProps> = ({
 	const speakQuestion = () => {
 		setError("");
 		setStatus("Reading question…");
+		hasStartedRef.current = true; // Mark that we've started the flow
 		const utterance = new SpeechSynthesisUtterance(question);
 		setSpeaking(true);
 		utterance.onend = () => {
@@ -236,8 +264,8 @@ const QuestionRecorder: React.FC<QuestionRecorderProps> = ({
 				<button
 					className="primary"
 					onClick={speakQuestion}
-					disabled={speaking || recording || !googleApiKey}
-					title={!googleApiKey ? "Google API key not configured" : ""}
+					disabled={speaking || recording || !googleApiKey || disabled}
+					title={!googleApiKey ? "Google API key not configured" : disabled ? "Conversation stopped" : ""}
 				>
 					{speaking ? "Speaking…" : recording ? "Recording…" : "Play"}
 				</button>
