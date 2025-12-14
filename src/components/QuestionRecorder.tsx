@@ -62,8 +62,19 @@ const QuestionRecorder: React.FC<QuestionRecorderProps> = ({
 	}, [question, autoStart, disabled, speaking, recording, googleApiKey]);
 
 	useEffect(() => {
-		if (!googleApiKey) {
+		// Debug: Log the actual value (first few chars only for security)
+		const envValue = import.meta.env.VITE_GOOGLE_CLOUD_API_KEY;
+		console.log("Environment variable check:");
+		console.log("- VITE_GOOGLE_CLOUD_API_KEY exists:", envValue !== undefined);
+		console.log("- VITE_GOOGLE_CLOUD_API_KEY type:", typeof envValue);
+		console.log("- VITE_GOOGLE_CLOUD_API_KEY length:", envValue?.length || 0);
+		console.log("- googleApiKey prop:", googleApiKey ? `${googleApiKey.substring(0, 10)}...` : "undefined/empty");
+		console.log("- All VITE_ env vars:", Object.keys(import.meta.env).filter(k => k.startsWith("VITE_")));
+
+		if (!googleApiKey || googleApiKey.trim() === "") {
 			setError("Google Cloud API key not configured. Set VITE_GOOGLE_CLOUD_API_KEY in your .env file.");
+		} else {
+			setError(""); // Clear error if key is present
 		}
 	}, [googleApiKey]);
 
